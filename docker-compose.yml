@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  api:
+    depends_on:
+      - db
+    links:
+      - db
+    restart: always
+    build:
+      context: ./scheduler-api
+      dockerfile: .dockerfile
+      target: development
+    entrypoint: ["npm", "run", "start:${NODE_ENV}"]
+    environment:
+      - NODE_ENV=${NODE_ENV}
+    env_file:
+      - .env
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    volumes:
+      - ./scheduler-api:/usr/src/app
+      - /usr/src/app/node_modules
+
+  db:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    ports:
+      - "${DATABASE_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
