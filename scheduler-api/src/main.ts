@@ -7,16 +7,17 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService: ConfigService = app.get(ConfigService);
 
-  const config = new DocumentBuilder()
-    .setTitle('Scheduler API documentation')
-    .setDescription(
-      'All the available calls with responses and parameters will be overview in the document.',
-    )
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup(configService.get('API_DOCS'), app, document);
-
-  await app.listen(configService.get('API_PORT'));
+  if (configService.get('NODE_ENV') === 'dev') {
+    const config = new DocumentBuilder()
+      .setTitle('Scheduler API documentation')
+      .setDescription(
+        'All the available calls with responses and parameters will be overview'
+      )
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup(configService.get('API_DOCS'), app, document);
+  }
+  await app.listen(configService.get('port'));
 }
 bootstrap();

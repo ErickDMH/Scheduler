@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS `scheduler`;
+CREATE DATABASE IF NOT EXISTS `scheduler_shadow`;
