@@ -1,14 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { SignUpDto } from 'src/features/auth/dto/signUp.dto';
 
-export class CreateUserDto {
-  @ApiProperty({ required: true })
-  email: string;
-
-  @ApiProperty({ required: false })
-  name?: string;
-
-  @ApiProperty({ required: false })
-  password?: string;
-
+export class CreateUserDto extends SignUpDto {
+  refreshToken?: string;
   id?: number;
 }
