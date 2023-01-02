@@ -1,6 +1,25 @@
 version: "3.8"
 
 services:
+  client:
+    depends_on:
+      - api
+    links:
+      - api
+    restart: always
+    build:
+      context: ./client
+      dockerfile: .dockerfile
+      target: ${NODE_ENV}
+    entrypoint: ["npm", "run", "${NODE_ENV}"]
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env
+    ports:
+      - ${CLIENT_PORT}:${CLIENT_PORT}
+    volumes:
+      - ./client:/usr/src/app
   api:
     depends_on:
       - db
